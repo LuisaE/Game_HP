@@ -23,6 +23,7 @@ $().ready(function (){
     var inimigo3 = new Image();
     var inimigo4 = new Image();
     
+    
     var p1 = new Player(xr, yr, 32, 45, 4, 4, harry, null, 0);
     var p2 = new Player(xr + 50, yr+20, 32, 45, 1, 4, inimigo1, 0, 1);
     var p3 = new Player(Math.floor(50 + Math.random() * ($canvas[0].width - 2 * 50)), yr+80, 32, 45, 1,4, inimigo2, 1, 1);
@@ -38,7 +39,7 @@ $().ready(function (){
     function isLoaded(){
         if(load === total){
             clearInterval(loop);
-            //start();
+            menu();
         }else{
             ctx.fillStyle = 'black';
             ctx.font = '30px harry';
@@ -47,13 +48,32 @@ $().ready(function (){
             ctx.fillText(msg, $canvas[0].width/2-w/2, $canvas[0].height/2);
         }
     }
+    function erase() {
+        ctx.fillStyle = '#A4A5A5';
+        ctx.fillRect(0,0,500,300);
+    }
+    
+    function menu() {
+        erase();
+        ctx.fillStyle = '#000000';
+        ctx.font = '36px harry';
+        ctx.textAlign = 'center';
+        ctx.fillText('Get coins and survive!', $canvas[0].width / 2, $canvas[0].height / 4);
+        ctx.font = '24px harry';
+        ctx.fillText('Click to Start', $canvas[0].width / 2, $canvas[0].height / 2);
+        ctx.font = '18px harry';
+        ctx.fillText('Move: A left, W up, D right, S down.', $canvas[0].width / 2, ($canvas[0].height / 4) * 3);
+        $canvas[0].addEventListener('click', start);
+}
     
    function start(){
         theme.play();
         drawScreen();
+        $canvas[0].removeEventListener('click', start);
     }
     
     function drawScreen(){
+        erase();
         p1.move(key);
         p2.aleatorio();
         p3.aleatorio();
@@ -69,7 +89,7 @@ $().ready(function (){
         ctx.fillStyle='black';
             ctx.font = '15px harry';
             ctx.textBaseline = 'top';
-            ctx.fillText(pontuacao, 5, 5);
+            ctx.fillText(pontuacao, 8, 5);
         
         p1.animate(ctx);
         p2.animate(ctx);
@@ -94,7 +114,7 @@ $().ready(function (){
             ctx.fillStyle='white';
             ctx.font = '50px harry';
             ctx.textBaseline = 'top';
-            ctx.fillText("Game over", 145, 110);
+            ctx.fillText("Game over", $canvas[0].width / 2, $canvas[0].height / 3);
             theme.pause();
         }
     }
@@ -332,5 +352,6 @@ function Player(x, y, w, h, s, ns, img, dir, mov) {
         ctx.fillRect(this.x-10,this.y-10, 28, 28);
         ctx.drawImage(this.img, Math.floor(this.cf/fd)*this.w, 0, this.w, this.h, this.x, this.y, this.w, this.h); //contador vezes largura
         this.cf++;
-    };   
+    };
+    
 }
